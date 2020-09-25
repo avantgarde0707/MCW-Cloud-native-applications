@@ -2098,7 +2098,7 @@ In this task you will setup a Kubernetes Ingress to take advantage of path-based
    The following resource configuration should work as is:
 
    ```yaml
-   apiVersion: certmanager.k8s.io/v1alpha1
+   apiVersion: cert-manager.io/v1
    kind: ClusterIssuer
    metadata:
      name: letsencrypt-prod
@@ -2140,7 +2140,7 @@ In this task you will setup a Kubernetes Ingress to take advantage of path-based
     Use the following as the contents and update the `[SUFFIX]` and `[AZURE-REGION]` to match your ingress DNS name:
 
     ```yaml
-    apiVersion: certmanager.k8s.io/v1alpha1
+    apiVersion: cert-manager.io/v1
     kind: Certificate
     metadata:
       name: tls-secret
@@ -2196,7 +2196,7 @@ In this task you will setup a Kubernetes Ingress to take advantage of path-based
       name: content-ingress
       annotations:
         kubernetes.io/ingress.class: nginx
-        certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+        cert-manager.io/cluster-issuer: letsencrypt-prod
         nginx.ingress.kubernetes.io/rewrite-target: /$1
     spec:
       tls:
