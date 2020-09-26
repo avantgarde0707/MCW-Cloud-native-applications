@@ -178,7 +178,8 @@ The purpose of this task is to make sure you can run the application successfull
 6. To initialize the local database with test content, first navigate to the content-init directory and run npm install.
 
    ```bash
-   cd ~/Fabmedical/content-init
+   git clone https://github.com/nmeisenzahl/MCW-Cloud-native-applications.git
+   cd MCW-Cloud-native-applications/Hands-on\ lab/lab-files/developer/content-init
    npm install
    ```
 
@@ -265,13 +266,13 @@ The purpose of this task is to make sure you can run the application successfull
 14. From Azure cloud shell, run the following command to find the IP address for the build agent VM provisioned when you ran the ARM deployment.
 
     ```bash
-    az vm show -d -g fabmedical-[SUFFIX] -n fabmedical-[SHORT_SUFFIX] --query publicIps -o tsv
+    az vm show -d -g fabmedical-[SUFFIX] -n fabmedical --query publicIps -o tsv
     ```
 
     Example:
 
     ```bash
-    az vm show -d -g fabmedical-sol -n fabmedical-SOL --query publicIps -o tsv
+    az vm show -d -g fabmedical-sol -n fabmedical --query publicIps -o tsv
     ```
 
 15. From the cloud shell in the build machine edit the `app.js` file using vim.
@@ -310,7 +311,7 @@ In this task, you will browse to the web application for testing.
 
 1. From the Azure portal select the resource group you created named `fabmedical-SUFFIX`.
 
-2. Select the build agent VM named `fabmedical-SUFFIX` from your list of available resources.
+2. Select the build agent VM named `fabmedical` from your list of available resources.
 
    ![In this screenshot of your list of available resources, the first item is selected, which has the following values for Name, Type, and Location: fabmedical-soll (a red arrows points to this name), Virtual machine, and East US 2.](media/image54.png)
 
@@ -477,6 +478,8 @@ In this task, you will create Docker images for the application --- one for the 
 4. Commit and push the new Dockerfile before continuing.
 
    ```bash
+   git config --global user.email "you@example.com"
+   git config --global user.name "Your Name"
    git add .
    git commit -m "Added Dockerfile"
    git push
@@ -730,7 +733,7 @@ for several containers and run them together.
        restart: always
 
      api:
-       build: ./Fabmedical/content-api
+       build: ./content-api
        image: content-api
        depends_on:
          - mongo
@@ -738,7 +741,7 @@ for several containers and run them together.
          MONGODB_CONNECTION: mongodb://mongo:27017/contentdb
 
      web:
-       build: ./Fabmedical/content-web
+       build: ./content-web
        image: content-web
        depends_on:
          - api
@@ -802,7 +805,7 @@ for several containers and run them together.
 
    services:
      init:
-       build: ./Fabmedical/content-init
+       build: ./content-init
        image: content-init
        depends_on:
          - mongo
@@ -1171,7 +1174,7 @@ In this task, you will deploy the API application to the Azure Kubernetes Servic
 
 3. Select **SHOW ADVANCED OPTIONS**
 
-   - Enter `0.125` for the CPU requirement.
+   - Enter `1` for the CPU requirement.
 
    - Enter `128` for the Memory requirement.
 
@@ -1273,7 +1276,7 @@ In this task, you will deploy the API application to the Azure Kubernetes Servic
 18. Update the api deployment by using `kubectl` to apply the new configuration.
 
     ```bash
-    kubectl apply -f api.deployment.yml
+    kubectl apply -f api.deployment.yml --force=true
     ```
 
 19. Select **Deployments** then **api** to view the api deployment. It now has a healthy instance and the logs indicate it has connected to mongodb.
@@ -1399,7 +1402,7 @@ In this task, deploy the web service using `kubectl`.
 10. Type the following command to deploy the application described by the YAML files. You will receive a message indicating the items kubectl has created a web deployment and a web service.
 
     ```bash
-    kubectl create --save-config=true -f web.deployment.yml -f web.service.yml
+    kubectl apply -f web.deployment.yml -f web.service.yml
     ```
 
     ![In this screenshot of the console, kubectl apply -f kubernetes-web.yaml has been typed and run at the command prompt. Messages about web deployment and web service creation appear below.](media/image93.png)
@@ -1430,11 +1433,11 @@ In this task, you will deploy the web service using a [Helm](https://helm.sh/) c
 
 5. Open a **new** Azure Cloud Shell console.
 
-6. Update your starter files by pulling the latest changes from the Git repository:
+6. Update your starter files by cloning the latest changes from the Git repository:
 
     ```bash
-    cd ~/MCW-Cloud-native-applications/Hands-on\ lab/lab-files/developer/content-web
-    git pull
+   git clone https://github.com/nmeisenzahl/MCW-Cloud-native-applications.git
+   cd MCW-Cloud-native-applications/Hands-on\ lab/lab-files/developer/content-web
     ```
 
 7. We will use the `helm create` command to scaffold out a chart implementation that we can build on. Use the following commands to create a new chart named `web` in a new directory:
@@ -1591,7 +1594,8 @@ In this task, you will deploy the web service using a [Helm](https://helm.sh/) c
 
     ```bash
     cd ..
-    git pull
+    git config --global user.email "you@example.com"
+    git config --global user.name "Your Name"
     git add charts/
     git commit -m "Helm chart added."
     git push
@@ -1639,7 +1643,7 @@ In this task, you will use a Kubernetes Job to run a container that is meant to 
 5. Type the following command to deploy the job described by the YAML. You will receive a message indicating the kubectl has created an init "job.batch".
 
    ```bash
-   kubectl create --save-config=true -f init.job.yml
+   kubectl apply -f init.job.yml
    ```
 
 6. View the Job by selecting **Jobs** under **Workloads** in the Kubernetes UI.
@@ -2219,6 +2223,7 @@ In this task you will setup a Kubernetes Ingress to take advantage of path-based
 6. Run the update script.
 
    ```bash
+   az login -u <service-principal-id> -p "<secret>" --service-principal --tenant <tenant>
    bash ./update-ip.sh
    ```
 
@@ -2265,7 +2270,10 @@ In this task you will setup a Kubernetes Ingress to take advantage of path-based
         privateKeySecretRef:
           name: letsencrypt-prod
         # Enable HTTP01 validations
-        http01: {}
+        solvers:
+        - http01:
+            ingress:
+              class: nginx
     ```
 
 10. Save changes and close the editor.
@@ -2273,7 +2281,7 @@ In this task you will setup a Kubernetes Ingress to take advantage of path-based
 11. Create the issuer using `kubectl`.
 
     ```bash
-    kubectl create --save-config=true -f clusterissuer.yml
+    kubectl apply -f clusterissuer.yml
     ```
 
 12. Now you can create a certificate object.
@@ -2296,20 +2304,15 @@ In this task you will setup a Kubernetes Ingress to take advantage of path-based
     apiVersion: cert-manager.io/v1
     kind: Certificate
     metadata:
-      name: tls-secret
+    name: tls-secret
     spec:
-      secretName: tls-secret
-      dnsNames:
-        - fabmedical-[SUFFIX]-ingress.[AZURE-REGION].cloudapp.azure.com
-      acme:
-        config:
-          - http01:
-              ingressClass: nginx
-            domains:
-              - fabmedical-[SUFFIX]-ingress.[AZURE-REGION].cloudapp.azure.com
-      issuerRef:
-        name: letsencrypt-prod
-        kind: ClusterIssuer
+    secretName: tls-secret
+    dnsNames:
+    - fabmedical-227417-ingress.westus.cloudapp.azure.com
+    issuerRef:
+       name: letsencrypt-prod
+       kind: ClusterIssuer
+       group: cert-manager.io
     ```
 
 13. Save changes and close the editor.
@@ -2317,7 +2320,7 @@ In this task you will setup a Kubernetes Ingress to take advantage of path-based
 14. Create the certificate using `kubectl`.
 
     ```bash
-    kubectl create --save-config=true -f certificate.yml
+    kubectl apply -f certificate.yml
     ```
 
     > **Note**: To check the status of the certificate issuance, use the `kubectl describe certificate tls-secret` command and look for an _Events_ output similar to the following:
@@ -2343,7 +2346,7 @@ In this task you will setup a Kubernetes Ingress to take advantage of path-based
     Use the following as the contents and update the `[SUFFIX]` and `[AZURE-REGION]` to match your ingress DNS name
 
     ```yaml
-    apiVersion: apps/v1
+    apiVersion: networking.k8s.io/v1beta1
     kind: Ingress
     metadata:
       name: content-ingress
@@ -2375,7 +2378,7 @@ In this task you will setup a Kubernetes Ingress to take advantage of path-based
 17. Create the ingress using `kubectl`.
 
     ```bash
-    kubectl create --save-config=true -f content.ingress.yml
+    kubectl apply -f content.ingress.yml
     ```
 
 18. Refresh the ingress endpoint in your browser. You should be able to visit the speakers and sessions pages and see all the content.
