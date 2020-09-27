@@ -958,6 +958,7 @@ FabMedical has provided starter files for you. They have taken a copy of the web
 7. Navigate to the FabMedical source code folder and list the contents.
 
    ```bash
+   git clone https://github.com/nmeisenzahl/MCW-Cloud-native-applications.git
    cd ~/MCW-Cloud-native-applications/Hands-on\ lab/lab-files/developer/
    ls
    ```
