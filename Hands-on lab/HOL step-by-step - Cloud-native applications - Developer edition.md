@@ -931,6 +931,92 @@ In this task, you will push images to your ACR account, version images with tagg
 
 ### Task 9: Setup CI Pipeline to Push Images
 
+#### Create a GitHub project
+
+FabMedical has provided starter files for you. They have taken a copy of the websites for their customer Contoso Neuro and refactored it from a single node.js site into a website with a content API that serves up the speakers and sessions. This refactored code is a starting point to validate the containerization of their websites. Use this to help them complete a POC that validates the development workflow for running the website and API as Docker containers and managing them within the Azure Kubernetes Service environment.
+
+1. Open a web browser, and navigate to <https://www.github.com>. Log in using your GitHub account credentials.
+
+2. In the upper-right corner, expand the user drop down menu and select **Your repositories**.
+
+    ![The user menu is expanded with the Your repositories item selected.](media/2020-08-23-18-03-40.png "User menu")
+
+3. Next to the search criteria, locate and select the **New** button.
+
+    ![The GitHub Find a repository search criteria is shown with the New button selected.](media/2020-08-23-18-08-02.png "New repository button")
+
+4. On the **Create a new repository** screen, name the repository **Fabmedical** and select the **Create repository** button.
+
+    ![Create a new repository page with Repository name field and Create repository button highlighted.](media/2020-08-23-18-11-38.png "Create a new repository")
+
+5. On the **Quick setup** screen, copy the **HTTPS** GitHub URL for your new repository, paste this in notepad for future use.
+
+    ![Quick setup screen is displayed with the copy button next to the GitHub URL textbox selected.](media/2020-08-23-18-15-45.png "Quick setup screen")
+
+6. Open a **new** Azure Cloud Shell console.
+
+7. Navigate to the FabMedical source code folder and list the contents.
+
+   ```bash
+   cd ~/MCW-Cloud-native-applications/Hands-on\ lab/lab-files/developer/
+   ls
+   ```
+
+   > **Important note**: If you will be taking the Infrastructure edition of the lab, instead of using the above instructions, type the following ones:
+   >
+   > ```bash
+   > cd ~/MCW-Cloud-native-applications/Hands-on\ lab/lab-files/infrastructure/
+   > ls
+   > ```
+   >
+   > This will take you to the version of the starter files that will be used by that edition of the lab.
+
+8. You'll see the listing includes three folders, one for the web site, another for the content API and one to initialize API data:
+
+   ```bash
+   content-api/
+   content-init/
+   content-web/
+   ```
+
+9. Using the Cloud Shell, initialize a new git repository:
+
+    ```bash
+    git init
+    git add .
+    git commit -m "Initial Commit"
+    ```
+
+10. Set the remote origin to the GitHub URL by issuing the following command:
+
+    ```bash
+    git remote add origin <your GitHub URL>
+    ```
+
+11. Set your username and email, which git uses for commits.
+
+    ```bash
+    git config --global user.email "you@example.com"
+    git config --global user.name "Your Name"
+    ```
+
+12. Configure git CLI to cache your credentials, so that you don't have to keep re-typing them.
+
+    ```bash
+    git config --global --unset credential.helper
+    git config --global credential.helper store
+    ```
+
+13. Push to the master branch by issuing the following command:
+
+    ```bash
+    git push -u origin master
+    ```
+
+    > **Note**: Reference the following link for help with setting up a GitHub personal access token to use for authenticating `git` with your GitHub account: <https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token>
+
+#### Setup CI Pipeline to Push Images
+
 In this task, you will use YAML to define a GitHub Actions workflow that builds your Docker
 image and pushes it to your ACR instance automatically.
 
@@ -1436,8 +1522,8 @@ In this task, you will deploy the web service using a [Helm](https://helm.sh/) c
 6. Update your starter files by cloning the latest changes from the Git repository:
 
     ```bash
-   git clone https://github.com/nmeisenzahl/MCW-Cloud-native-applications.git
-   cd MCW-Cloud-native-applications/Hands-on\ lab/lab-files/developer/content-web
+   cd ~/MCW-Cloud-native-applications/Hands-on\ lab/lab-files/developer/content-web
+   git pull
     ```
 
 7. We will use the `helm create` command to scaffold out a chart implementation that we can build on. Use the following commands to create a new chart named `web` in a new directory:
