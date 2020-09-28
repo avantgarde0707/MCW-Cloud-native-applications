@@ -1865,7 +1865,13 @@ In this task, you will use GitHub Actions workflows to automate the process for 
             HELM_EXPERIMENTAL_OCI: 1
     ```
 
-8. Save the file.
+8. Save the file, then commit and push it to the Git repository:
+
+    ```bash
+    git add .
+    git commit -m "Added workflow YAML"
+    git push
+    ```
 
 9. On the **content-web** workflow, select **Run workflow** and manually trigger the workflow to execute.
 
