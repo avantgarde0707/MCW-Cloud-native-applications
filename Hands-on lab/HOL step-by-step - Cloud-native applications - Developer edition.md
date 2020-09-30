@@ -717,7 +717,7 @@ for several containers and run them together.
 2. Navigate to your home directory (where you checked out the content repositories) and create a docker compose file.
 
    ```bash
-   cd ~
+   cd ..
    vi docker-compose.yml
    <i>
    ```
