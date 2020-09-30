@@ -178,8 +178,7 @@ The purpose of this task is to make sure you can run the application successfull
 6. To initialize the local database with test content, first navigate to the content-init directory and run npm install.
 
    ```bash
-   git clone https://github.com/nmeisenzahl/MCW-Cloud-native-applications.git
-   cd MCW-Cloud-native-applications/Hands-on\ lab/lab-files/developer/content-init
+   cd ~/content-init
    npm install
    ```
 
