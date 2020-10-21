@@ -722,30 +722,30 @@ for several containers and run them together.
    Type the following as the contents of `docker-compose.yml`:
 
    ```yaml
-    version: "3.4"
+   version: "3.4"
 
-    services:
-      mongo:
-        image: mongo
-        restart: always
+   services:
+     mongo:
+       image: mongo
+       restart: always
 
-      api:
-        build: ./Fabmedical/content-api
-        image: content-api
-        depends_on:
-          - mongo
-        environment:
-          MONGODB_CONNECTION: mongodb://mongo:27017/contentdb
+     api:
+       build: ./Fabmedical/content-api
+       image: content-api
+       depends_on:
+         - mongo
+       environment:
+         MONGODB_CONNECTION: mongodb://mongo:27017/contentdb
 
-      web:
-        build: ./Fabmedical/content-web
-        image: content-web
-        depends_on:
-          - api
-        environment:
-          CONTENT_API_URL: http://api:3001
-        ports:
-          - "3000:3000"
+     web:
+       build: ./Fabmedical/content-web
+       image: content-web
+       depends_on:
+         - api
+       environment:
+         CONTENT_API_URL: http://api:3001
+       ports:
+         - "3000:3000"
    ```
 
    Press the Escape key and type `:wq` and then press the Enter key to save and close the file.
@@ -798,16 +798,16 @@ for several containers and run them together.
    Add the following as the content:
 
    ```yaml
-    version: "3.4"
+   version: "3.4"
 
-    services:
-      init:
-        build: ./Fabmedical/content-init
-        image: content-init
-        depends_on:
-          - mongo
-        environment:
-          MONGODB_CONNECTION: mongodb://mongo:27017/contentdb
+   services:
+     init:
+       build: ./Fabmedical/content-init
+       image: content-init
+       depends_on:
+         - mongo
+       environment:
+         MONGODB_CONNECTION: mongodb://mongo:27017/contentdb
    ```
 
 7. To reconfigure the mongodb volume, we need to bring down the mongodb service first.
