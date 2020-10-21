@@ -953,7 +953,7 @@ image and pushes it to your ACR instance automatically.
    cd ~/Fabmedical
    ```
 
-7. Before the GitHub Actions workflows can be setup, the `.github/workflows` directory needs to be created. Do this by running the following commands:
+7. Before the GitHub Actions workflows can be setup, the `.github/workflows` directory needs to be created. You can use the following commands in case the directories are not yet available:
 
     ```bash
     mkdir ~/Fabmedical/.github
