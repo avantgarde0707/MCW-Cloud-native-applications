@@ -998,9 +998,9 @@ image and pushes it to your ACR instance automatically.
     # Environment variables are defined so that they can be used throughout the job definitions.
     env:
       imageRepository: 'content-web'
-      resourceGroupName: 'Fabmedical-[SHORT_SUFFIX]'
-      containerRegistryName: 'fabmedical[SHORT_SUFFIX]'
-      containerRegistry: 'fabmedical[SHORT_SUFFIX].azurecr.io'
+      resourceGroupName: 'fabmedical-[SUFFIX]'
+      containerRegistryName: 'acr[SUFFIX]'
+      containerRegistry: 'acr[SUFFIX].azurecr.io'
       dockerfilePath: './content-web'
       tag: '${{ github.run_id  }}'
 
